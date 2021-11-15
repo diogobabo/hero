@@ -58,12 +58,33 @@ public class Game {
                 screen.refresh();
                 key = screen.readInput();
 
+                System.out.println(new StringBuilder().append("Player lost retrieving only ").append(arena.getScore()).append(" coins"));
                 if(KeyType.EOF == key.getKeyType()){
                     break;
                 }else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
                     screen.close();
                 }
 
+                return;
+            }
+            else if(flag == 4){
+                screen.clear();
+                TextGraphics graphics = screen.newTextGraphics();
+                graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
+                graphics.enableModifiers(SGR.BOLD);
+                graphics.putString((width/2)-5, (height/2)-2, "YOU WON");
+                graphics.setForegroundColor(TextColor.Factory.fromString("#fcfcfc"));
+                graphics.enableModifiers(SGR.BOLD);
+                graphics.putString(((width*2)/3), (height)-1, " 'q' to quit");
+                screen.refresh();
+                key = screen.readInput();
+
+                System.out.println(new StringBuilder().append("Player won retrieving all the ").append(arena.getScore()).append(" coins"));
+                if(KeyType.EOF == key.getKeyType()){
+                    break;
+                }else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
+                    screen.close();
+                }
                 return;
             }
         }

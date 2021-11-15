@@ -10,12 +10,13 @@ import java.util.List;
 import java.util.Random;
 
 public class Arena {
-    int width;
-    int height;
+    private int width;
+    private int height;
     private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
     private List<Monster> monsters;
+    private int score;
 
     public Arena(int width, int height) {
         this.width = width;
@@ -24,7 +25,13 @@ public class Arena {
         this.walls = createWalls();
         this.coins = createCoins();
         this.monsters = createMonsters();
+        score = 0;
     }
+
+    public int getScore() {
+        return score;
+    }
+
     private List<Coin> createCoins() {
         Random random = new Random();
         ArrayList<Coin> coins = new ArrayList<>();
@@ -80,6 +87,9 @@ public class Arena {
             return 2;
         }
         if(!Flag){
+            if(coins.size() == 0){
+                return 4;
+            }
             return 3;
         }
         return 0;
@@ -101,6 +111,9 @@ public class Arena {
             }
             moveMonsters();
             if(checkIfDead()){
+                return false;
+            }
+            if(coins.size() == 0){
                 return false;
             }
         }
@@ -168,6 +181,7 @@ public class Arena {
         for(int x = 0; x<coins.size();x++){
             if(coins.get(x).getPosition().equals(position)){
                 coins.remove(x);
+                score = score +1;
                 return true;
             }
         }
