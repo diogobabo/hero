@@ -5,20 +5,36 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
     int width;
     int height;
     private Hero hero;
     private List<Wall> walls;
+    private List<Coin> coins;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
         hero = new Hero(10, 10);
         this.walls = createWalls();
+        this.coins = createCoins();
 
+    }
+    private List<Coin> createCoins() {
+        Random random = new Random();
+        ArrayList<Coin> coins = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+            if(coins.get(i).equals(hero.getPosition())){
+                coins.remove(i);
+                i = i-1;
+            }
+        }
+        return coins;
     }
 
     private List<Wall> createWalls() {
@@ -53,15 +69,21 @@ public class Arena {
     }
 
     private void moveHero(Position position) {
-        if (canHeroMove(position))
+        if (canHeroMove(position)){
             hero.setPosition(position);
+            retrieveCoins(position);
+        }
+
     }
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         for (Wall wall : walls)
-            wall.draw(graphics,"#03ff8d","*");
+            wall.draw(graphics,"#00ff26","*");
+        for (Coin coin : coins){
+            coin.draw(graphics,"#fcfcfc","O");
+        }
         hero.draw(graphics,"#FFFF33","X");
 
     }
@@ -78,6 +100,15 @@ public class Arena {
         }
 
         return true;
+    }
+
+    private void retrieveCoins(Position position) {
+        for(int x = 0; x<coins.size();x++){
+            if(coins.get(x).getPosition().equals(position)){
+                coins.remove(x);
+                return;
+            }
+        }
     }
 
 }
