@@ -1,15 +1,10 @@
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.Screen;
 
-public class Hero {
-    private Position position;
+public class Hero extends Element{
+
     public Hero(int x, int y){
-        position = new Position(x,y);
-        position.setX(x);
-        position.setY(y);
-    }
-    public void draw(Screen screen){
-        screen.setCharacter(position.getX(), position.getY(), TextCharacter.fromCharacter('X')[0]);
+        super(x,y);
     }
 
     public void setX(int x) {
