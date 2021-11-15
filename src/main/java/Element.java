@@ -17,4 +17,7 @@ public class Element {
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), Char);
     }
+    public Position getPosition() {
+        return position;
+    }
 }

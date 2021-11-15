@@ -15,6 +15,7 @@ public class Arena {
     private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
     public Arena(int width, int height) {
         this.width = width;
@@ -22,19 +23,31 @@ public class Arena {
         hero = new Hero(10, 10);
         this.walls = createWalls();
         this.coins = createCoins();
-
+        this.monsters = createMonsters();
     }
     private List<Coin> createCoins() {
         Random random = new Random();
         ArrayList<Coin> coins = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
-            if(coins.get(i).equals(hero.getPosition())){
+            if(coins.get(i).getPosition().equals(hero.getPosition())){
                 coins.remove(i);
                 i = i-1;
             }
         }
         return coins;
+    }
+    private List<Monster> createMonsters() {
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            monsters.add(new Monster(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+            if(monsters.get(i).getPosition().equals(hero.getPosition())){
+                monsters.remove(i);
+                i = i-1;
+            }
+        }
+        return monsters;
     }
 
     private List<Wall> createWalls() {
@@ -83,6 +96,9 @@ public class Arena {
             wall.draw(graphics,"#00ff26","*");
         for (Coin coin : coins){
             coin.draw(graphics,"#fcfcfc","O");
+        }
+        for (Monster monster : monsters){
+            monster.draw(graphics,"#f50000","R");
         }
         hero.draw(graphics,"#FFFF33","X");
 
