@@ -12,6 +12,8 @@ import java.io.IOException;
 public class Game {
     private Screen screen;
     private Arena arena;
+    int width;
+    int height;
     public Game(int width, int height) throws IOException {
 
         TerminalSize terminalSize = new TerminalSize(width, height);
@@ -22,6 +24,8 @@ public class Game {
         screen.startScreen();
         screen.doResizeIfNecessary();
         arena = new Arena(width, height);
+        this.height = height;
+        this.width = width;
     }
     private void draw() throws IOException{
         screen.clear();
@@ -40,6 +44,27 @@ public class Game {
             }
             else if(KeyType.EOF == key.getKeyType()){
                 break;
+            }
+            else if(flag == 3){
+
+                screen.clear();
+                TextGraphics graphics = screen.newTextGraphics();
+                graphics.setForegroundColor(TextColor.Factory.fromString("#f50000"));
+                graphics.enableModifiers(SGR.BOLD);
+                graphics.putString((width/2)-5, (height/2)-2, "YOU LOSE");
+                graphics.setForegroundColor(TextColor.Factory.fromString("#fcfcfc"));
+                graphics.enableModifiers(SGR.BOLD);
+                graphics.putString(((width*2)/3), (height)-1, " 'q' to quit");
+                screen.refresh();
+                key = screen.readInput();
+
+                if(KeyType.EOF == key.getKeyType()){
+                    break;
+                }else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
+                    screen.close();
+                }
+
+                return;
             }
         }
 

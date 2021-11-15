@@ -65,29 +65,46 @@ public class Arena {
 
     public int processKey(KeyStroke key) {
         System.out.println(key);
+        boolean Flag;
         if (key.getKeyType() == KeyType.ArrowUp)
-            moveHero(hero.moveUp());
+            Flag = moveHero(hero.moveUp());
         else if (key.getKeyType() == KeyType.ArrowDown) {
-            moveHero(hero.moveDown());
+            Flag = moveHero(hero.moveDown());
         } else if (key.getKeyType() == KeyType.ArrowLeft) {
-            moveHero(hero.moveLeft());
+            Flag = moveHero(hero.moveLeft());
         } else if (key.getKeyType() == KeyType.ArrowRight) {
-            moveHero(hero.moveRight());
+            Flag = moveHero(hero.moveRight());
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
             return 1;
         } else {
             return 2;
         }
+        if(!Flag){
+            return 3;
+        }
         return 0;
     }
-
-    private void moveHero(Position position) {
+    public boolean checkIfDead(){
+        for (Monster monster : monsters){
+            if(monster.getPosition().equals(hero.getPosition())){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean moveHero(Position position) {
         if (canHeroMove(position)){
             hero.setPosition(position);
             retrieveCoins(position);
+            if(checkIfDead()){
+                return false;
+            }
             moveMonsters();
+            if(checkIfDead()){
+                return false;
+            }
         }
-
+        return true;
     }
 
     public void draw(TextGraphics graphics) {
@@ -103,6 +120,17 @@ public class Arena {
         }
         hero.draw(graphics,"#FFFF33","X");
 
+    }
+    private boolean verifyMonsterCollisions(Monster m,Position position){
+        for (Monster monster : monsters){
+            if(m.equals(monster)){
+                continue;
+            }
+            if(monster.getPosition().equals(position)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean canHeroMove(Position position){
@@ -123,6 +151,9 @@ public class Arena {
             Position nexPos = monster.move();
             for (Wall wall : walls){
                 if (wall.getPosition().equals(nexPos)){
+                    return;
+                }
+                if(!verifyMonsterCollisions(monster,nexPos)){
                     return;
                 }
             }
