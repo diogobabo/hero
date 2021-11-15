@@ -14,16 +14,13 @@ public class Game {
     private Arena arena;
     public Game(int width, int height) throws IOException {
 
-        TerminalSize terminalSize = new TerminalSize(40, 20);
+        TerminalSize terminalSize = new TerminalSize(width, height);
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
         Terminal terminal = terminalFactory.createTerminal();
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
         screen.startScreen();
         screen.doResizeIfNecessary();
-        TextGraphics graphics = this.screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         arena = new Arena(width, height);
     }
     private void draw() throws IOException{

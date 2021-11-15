@@ -41,7 +41,7 @@ public class Arena {
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width+1, height+1), ' ');
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(hero.getX(), hero.getY()), "X");
@@ -50,7 +50,7 @@ public class Arena {
 
     public boolean canHeroMove(Position position){
 
-        if(0 <= position.getY() && position.getY() <= height && 0 <= position.getX() && position.getX() <= width){
+        if(0 <= position.getY() && position.getY() <= height-1 && 0 <= position.getX() && position.getX() <= width-1){
             return true;
         }
 
