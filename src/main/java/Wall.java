@@ -8,8 +8,4 @@ public class Wall extends Element{
         super(x,y);
     }
 
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
 }

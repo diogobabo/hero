@@ -85,6 +85,7 @@ public class Arena {
         if (canHeroMove(position)){
             hero.setPosition(position);
             retrieveCoins(position);
+            moveMonsters();
         }
 
     }
@@ -117,14 +118,29 @@ public class Arena {
 
         return true;
     }
+    private void  moveMonsters(){
+        for (Monster monster : monsters){
+            Position nexPos = monster.move();
+            for (Wall wall : walls){
+                if (wall.getPosition().equals(nexPos)){
+                    return;
+                }
+            }
+            if(0 <= nexPos.getY() && nexPos.getY() <= height-1 && 0 <= nexPos.getX() && nexPos.getX() <= width-1){
+                monster.setPosition(nexPos);
+            }
 
-    private void retrieveCoins(Position position) {
+        }
+    }
+
+    private boolean retrieveCoins(Position position) {
         for(int x = 0; x<coins.size();x++){
             if(coins.get(x).getPosition().equals(position)){
                 coins.remove(x);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
 }
